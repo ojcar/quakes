@@ -9,9 +9,7 @@ namespace :quake_data do
     response = Net::HTTP.get_response(uri)
     case response
     when Net::HTTPOK
-      CSV.parse(response.body, :headers => true, :header_converters => lambda { |h| h.try(:downcase) }) do |row|
-        Quake.find_or_create_by_eqid(row.to_hash)
-      end
+      Quake.create_from_csv(response.body)
     else
       puts 'An Error Occurred'
       puts response.inspect

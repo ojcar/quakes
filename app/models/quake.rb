@@ -1,7 +1,7 @@
 class Quake < ActiveRecord::Base
-  attr_accessible :datetime, :depth, :eqid, :lat, :lon, :magnitude, :nst, :region, :src, :version
-
+  require 'csv'
   
+  attr_accessible :datetime, :depth, :eqid, :lat, :lon, :magnitude, :nst, :region, :src, :version
 
   class << self
     def search(params)
@@ -20,6 +20,12 @@ class Quake < ActiveRecord::Base
       end
 
       quakes
+    end
+
+    def create_from_csv(csv)
+      CSV.parse(csv, :headers => true, :header_converters => lambda { |h| h.try(:downcase) }) do |row|
+        Quake.find_or_create_by_eqid(row.to_hash)
+      end
     end
   end
 end
