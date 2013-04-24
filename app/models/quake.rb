@@ -16,7 +16,7 @@ class Quake < ActiveRecord::Base
         # this_lng = params[:near].split(',')[1]
         this_lat,this_lng = params[:near].split(',')
 
-        quakes = Quake.select("*, (3959 * acos(cos(radians(this_lat)) * cos(radians(lat)) * cos(radians(lng) - radians(this_lng)) + sin(radians(37)) * sin(radians(lat)))) AS distance").having("distance < 5")
+        quakes = Quake.select("*, (3959 * acos(cos(radians(this_lat)) * cos(radians(lat)) * cos(radians(lng) - radians(this_lng)) + sin(radians(this_lat)) * sin(radians(lat)))) AS distance").having("distance < 5")
       end
 
       quakes
